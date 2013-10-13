@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AnJaRoot Tester</string>
+    <string name="access_not_granted">You need to grant this app access to AnJaRoot. Hit the button below to request access.</string>
+    <string name="issue_request">Request Access</string>
+    <string name="restart_text">Access to AnJaRoot has been granted! You now have to restart this app by hitting the button below.</string>
+    <string name="restart_btn">Restart App</string>
+    <string name="functional">Access is granted and the power of AnJaRoot may now be used!</string>
+    <string name="execute_id_command">Execute \'id\' shell command</string>
+    <string name="get_package_list">First line of packages.list</string>
+
+</resources>

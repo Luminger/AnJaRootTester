@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="custom_rules_anjaroot" default="debug">
+    <xmlproperty file="AndroidManifest.xml" prefix="manifest" collapseAttributes="true"/>
+    <property name="anjaroot.version" value="${manifest.manifest.android:versionName}"/>
+    <property name="anjaroot.release.dir" location="release"/>
+    <target name="release" depends="android_rules.release">
+        <copy tofile="${anjaroot.release.dir}/AnJaRootTester-${anjaroot.version}.apk" overwrite="true"
+            file="bin/AnJaRootTester-release.apk"/>
+    </target>
+</project>
