@@ -27,28 +27,34 @@ import java.io.InputStreamReader;
 import org.failedprojects.anjaroot.library.AnJaRoot;
 import org.failedprojects.anjaroot.library.AnJaRootRequester;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends ActionBarActivity implements
 		AnJaRootRequester.ConnectionStatusListener,
 		AnJaRootRequester.AsyncRequestHandler {
 	private boolean connected = false;
 	private AnJaRootRequester requester;
 	private ProgressDialog dialog;
+	private ActionBar ab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// normal onCreate business
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// init ActionBar
+		ab = getSupportActionBar();
+		ab.setTitle(R.string.app_name);
 
 		// instantiate a new requester, needed to request access if it's not
 		// already granted.
@@ -60,6 +66,29 @@ public class MainActivity extends Activity implements
 		dialog.setMessage("Requesting access...");
 		dialog.setIndeterminate(true);
 
+		if (!AnJaRoot.isInstalled()) {
+			// show the "AnJaRoot is not installed" UI
+			findViewById(R.id.install_text).setVisibility(View.VISIBLE);
+			findViewById(R.id.install_btn).setVisibility(View.VISIBLE);
+
+			// Hide the requesting UI
+			findViewById(R.id.access_not_granted).setVisibility(View.GONE);
+			findViewById(R.id.issue_request).setVisibility(View.GONE);
+		} else if (AnJaRoot.isAccessGranted()) {
+			// Display UI which lets the user issue commands
+			findViewById(R.id.functional).setVisibility(View.VISIBLE);
+			findViewById(R.id.execute_id_command).setVisibility(View.VISIBLE);
+			findViewById(R.id.get_packages_list).setVisibility(View.VISIBLE);
+
+			// Hide the requesting UI
+			findViewById(R.id.access_not_granted).setVisibility(View.GONE);
+			findViewById(R.id.issue_request).setVisibility(View.GONE);
+		}
+
+		prepareButtons();
+	}
+
+	private void prepareButtons() {
 		// prepare the suicide button
 		Button suicide = (Button) findViewById(R.id.restart_btn);
 		suicide.setOnClickListener(new OnClickListener() {
@@ -87,18 +116,6 @@ public class MainActivity extends Activity implements
 				}
 			}
 		});
-
-		// TODO rename this library functions, they are not named properly
-		if (AnJaRoot.isAccessPossible() && AnJaRoot.isAccessGranted()) {
-			// Display UI which lets the user issue commands
-			findViewById(R.id.functional).setVisibility(View.VISIBLE);
-			findViewById(R.id.execute_id_command).setVisibility(View.VISIBLE);
-			findViewById(R.id.get_packages_list).setVisibility(View.VISIBLE);
-
-			// Hide the requesting UI
-			findViewById(R.id.access_not_granted).setVisibility(View.GONE);
-			findViewById(R.id.issue_request).setVisibility(View.GONE);
-		}
 
 		// prepare the "get id" button
 		Button id = (Button) findViewById(R.id.execute_id_command);
@@ -159,6 +176,15 @@ public class MainActivity extends Activity implements
 				}
 
 				AnJaRoot.dropAccess();
+			}
+		});
+
+		// prepare the "Open Play Store" Button
+		Button install = (Button) findViewById(R.id.install_btn);
+		install.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AnJaRoot.openPlayStore(MainActivity.this);
 			}
 		});
 	}
