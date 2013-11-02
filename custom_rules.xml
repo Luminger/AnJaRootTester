@@ -3,6 +3,7 @@
     <xmlproperty file="AndroidManifest.xml" prefix="manifest" collapseAttributes="true"/>
     <property name="anjaroot.version" value="${manifest.manifest.android:versionName}"/>
     <property name="anjaroot.release.dir" location="release"/>
+    <property file="../secure.properties" />
     <target name="release" depends="android_rules.release">
         <copy tofile="${anjaroot.release.dir}/AnJaRootTester-${anjaroot.version}.apk" overwrite="true"
             file="bin/AnJaRootTester-release.apk"/>
